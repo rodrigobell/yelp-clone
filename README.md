@@ -1,6 +1,6 @@
 # Project 3 - yelp-clone
 
-**Name of your app** is a Yelp search app using the [Yelp API](http://www.yelp.com/developers/documentation/v2/search_api).
+yelp-clone is a Yelp search app using the [Yelp API](http://www.yelp.com/developers/documentation/v2/search_api).
 
 Time spent: **X** hours spent in total
 
@@ -22,6 +22,9 @@ The following **optional** features are implemented:
 The following **additional** features are implemented:
 
 - [x] Search query is saved using User Defaults and app starts with whatever the user searched for last.
+- [x] User can call business from Details screen.
+- [x] Customize UI.
+   - [x] Detail screen background displays blurred thumbnail image of business.
 
 Please list two areas of the assignment you'd like to **discuss further with your peers** during the next class (examples include better ways to implement something, how to extend your app in certain ways, etc):
 

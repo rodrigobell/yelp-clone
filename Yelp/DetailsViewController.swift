@@ -93,15 +93,11 @@ class DetailsViewController: UIViewController, CLLocationManagerDelegate {
         }
     }
     
-
-    /*
-    // MARK: - Navigation
-
-    // In a storyboard-based application, you will often want to do a little preparation before navigation
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        // Get the new view controller using segue.destinationViewController.
-        // Pass the selected object to the new view controller.
+    @IBAction func callBusiness(_ sender: Any) {
+        if let phone = business.phone {
+            let url = NSURL(string: "tel://\(phone)")
+            UIApplication.shared.openURL(url as! URL)
+        }
     }
-    */
 
 }
