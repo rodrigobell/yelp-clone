@@ -31,6 +31,8 @@ class Business: NSObject {
         
         let location = dictionary["location"] as? NSDictionary
         var address = ""
+        var latitude: NSNumber = 0
+        var longitude: NSNumber = 0
         if location != nil {
             let addressArray = location!["address"] as? NSArray
             if addressArray != nil && addressArray!.count > 0 {
@@ -45,12 +47,17 @@ class Business: NSObject {
                 address += neighborhoods![0] as! String
             }
             
+            
             let coordinates = location!["coordinate"] as? NSDictionary
             if coordinates != nil {
-                self.coordLatitude = coordinates!["latitude"] as? NSNumber
-                self.coordLongitude = coordinates!["longitude"] as? NSNumber
+                latitude = (coordinates!["latitude"] as? NSNumber)!
+                longitude = (coordinates!["longitude"] as? NSNumber)!
             }
         }
+        
+        self.coordLatitude = latitude
+        self.coordLongitude = longitude
+        
         self.address = address
         
         let categoriesArray = dictionary["categories"] as? [[String]]

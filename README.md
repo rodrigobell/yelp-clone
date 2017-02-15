@@ -16,8 +16,8 @@ The following **optional** features are implemented:
 
 - [x] Search for businesses
    - [ ] Infinite scroll for restaurant results.
-   - [ ] Implement map view of restaurant results.
-- [ ] Implement the restaurant detail page.
+   - [x] Implement map view of restaurant results.
+- [x] Implement the restaurant detail page.
 
 The following **additional** features are implemented:
 

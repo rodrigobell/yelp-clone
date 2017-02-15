@@ -16,6 +16,7 @@ class DetailsViewController: UIViewController, CLLocationManagerDelegate {
     
     @IBOutlet weak var thumbImageView: UIImageView!
     @IBOutlet weak var ratingsImageView: UIImageView!
+    @IBOutlet weak var titleLabel: UILabel!
     @IBOutlet weak var reviewsCountLabel: UILabel!
     @IBOutlet weak var distanceLabel: UILabel!
     @IBOutlet weak var addressLabel: UILabel!
@@ -44,27 +45,20 @@ class DetailsViewController: UIViewController, CLLocationManagerDelegate {
         // Load data from business class
         thumbImageView.setImageWith(business.imageURL!)
         ratingsImageView.setImageWith(business.ratingImageURL!)
+        titleLabel.text = business.name
         reviewsCountLabel.text = "\(business.reviewCount!) Reviews"
         distanceLabel.text = business.distance
         addressLabel.text = business.address
         categoriesLabel.text = business.categories
-        
-        // Load map data
-        let centerLocation = CLLocation(latitude: 37.7833, longitude: -122.4167)
-        goToLocation(location: centerLocation)
-        
+
         // Show user's current location
         locationManager = CLLocationManager()
         locationManager.delegate = self
         locationManager.desiredAccuracy = kCLLocationAccuracyNearestTenMeters
         locationManager.distanceFilter = 200
         locationManager.requestWhenInUseAuthorization()
-    }
-
-    func goToLocation(location: CLLocation) {
-        let span = MKCoordinateSpanMake(0.1, 0.1)
-        let region = MKCoordinateRegionMake(location.coordinate, span)
-        mapView.setRegion(region, animated: false)
+        
+        addAnnotationAtAddress(address: addressLabel.text!, title: titleLabel.text!)
     }
     
     // Go to user's location when permission has been given
@@ -76,9 +70,26 @@ class DetailsViewController: UIViewController, CLLocationManagerDelegate {
     
     func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
         if let location = locations.first {
-            let span = MKCoordinateSpanMake(0.1, 0.1)
+            let span = MKCoordinateSpanMake(0.05, 0.05)
             let region = MKCoordinateRegionMake(location.coordinate, span)
             mapView.setRegion(region, animated: false)
+        }
+    }
+    
+    // Show business address on map
+    // add an annotation with an address: String
+    func addAnnotationAtAddress(address: String, title: String) {
+        let geocoder = CLGeocoder()
+        geocoder.geocodeAddressString(address) { (placemarks, error) in
+            if let placemarks = placemarks {
+                if placemarks.count != 0 {
+                    let coordinate = placemarks.first!.location!
+                    let annotation = MKPointAnnotation()
+                    annotation.coordinate = coordinate.coordinate
+                    annotation.title = title
+                    self.mapView.addAnnotation(annotation)
+                }
+            }
         }
     }
     
