@@ -8,7 +8,7 @@
 
 import UIKit
 
-class BusinessesViewController: UIViewController, UITableViewDelegate, UITableViewDataSource, UISearchBarDelegate {
+class BusinessesViewController: UIViewController, UITableViewDelegate, UITableViewDataSource, UISearchBarDelegate, UIScrollViewDelegate {
     
     let userDefaults = UserDefaults.standard
     
@@ -19,6 +19,7 @@ class BusinessesViewController: UIViewController, UITableViewDelegate, UITableVi
     var searchBar = UISearchBar()
     
     var isMoreDataLoading = false
+    var loadMoreOffset = 20
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -37,8 +38,8 @@ class BusinessesViewController: UIViewController, UITableViewDelegate, UITableVi
         let textFieldAppearance = UITextField.appearance()
         textFieldAppearance.keyboardAppearance = .light //.default//.light//.alert
         
-        if let initialQuery = self.userDefaults.string(forKey: "searchQuery") {
-            searchForBusinesses(query: initialQuery)
+        if let prevQuery = self.userDefaults.string(forKey: "searchQuery") {
+            searchForBusinesses(query: prevQuery)
         }
         
     }
@@ -89,27 +90,41 @@ class BusinessesViewController: UIViewController, UITableViewDelegate, UITableVi
         userDefaults.set(searchBar.text!, forKey: "searchQuery")
     }
     
-//    func scrollViewDidScroll(_ scrollView: UIScrollView) {
-//        if (!isMoreDataLoading) {
-//            // Calculate the position of one screen length before the bottom of the results
-//            let scrollViewContentHeight = tableView.contentSize.height
-//            let scrollOffsetThreshold = scrollViewContentHeight - tableView.bounds.size.height
-//            
-//            // When the user has scrolled past the threshold, start requesting
-//            if(scrollView.contentOffset.y > scrollOffsetThreshold && tableView.isDragging) {
-//                self.numPages += 1
-//                isMoreDataLoading = true
-//                
-//                // Update position of loadingMoreView, and start loading indicator
-//                let frame = CGRect(x: 0, y: collectionView.contentSize.height, width: collectionView.bounds.size.width, height: ProgressIndicator.defaultHeight)
-//                loadingMoreView?.frame = frame
-//                loadingMoreView!.startAnimating()
-//                
-//                // ... Code to load more results ...
-//                loadMoviesFromAPI()
-//            }
-//        }
-//    }
+    func scrollViewDidScroll(_ scrollView: UIScrollView) {
+        if (!isMoreDataLoading) {
+            // Calculate the position of one screen length before the bottom of the results
+            let scrollViewContentHeight = tableView.contentSize.height
+            let scrollOffsetThreshold = scrollViewContentHeight - tableView.bounds.size.height
+            
+            // When the user has scrolled past the threshold, start requesting
+            if(scrollView.contentOffset.y > scrollOffsetThreshold && tableView.isDragging) {
+                isMoreDataLoading = true
+                
+                let frame = CGRect(x: 0, y: tableView.contentSize.height, width: tableView.bounds.size.width, height: ProgressIndicator.defaultHeight)
+                
+                self.loadMoreOffset += 20
+                loadMoreData()
+            }
+        }
+    }
+    
+    func loadMoreData() {
+        let prevQuery = self.userDefaults.string(forKey: "searchQuery")
+        
+        Business.searchWithTerm(term: prevQuery!, offset: loadMoreOffset, completion: { (businesses: [Business]?, error: Error?) -> Void in
+            self.loadMoreOffset += 20
+            
+            self.businesses.append(contentsOf: businesses!)
+            
+            self.tableView.reloadData()
+            
+        })
+        
+        self.isMoreDataLoading = false
+        
+        self.tableView.reloadData()
+        
+    }
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         let cell = sender as! UITableViewCell
