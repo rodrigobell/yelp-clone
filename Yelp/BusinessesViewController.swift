@@ -18,6 +18,8 @@ class BusinessesViewController: UIViewController, UITableViewDelegate, UITableVi
     
     var searchBar = UISearchBar()
     
+    var isMoreDataLoading = false
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -27,7 +29,7 @@ class BusinessesViewController: UIViewController, UITableViewDelegate, UITableVi
         
         tableView.rowHeight = UITableViewAutomaticDimension
         tableView.estimatedRowHeight = 120
-        
+                
         // Embed search bar in navigation controller
         searchBar.sizeToFit()
         searchBar.placeholder = "Search"
@@ -78,8 +80,6 @@ class BusinessesViewController: UIViewController, UITableViewDelegate, UITableVi
         self.tableView.reloadData()
     }
     
-    
-    
     func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
         searchBar.showsCancelButton = false
         searchForBusinesses(query: searchBar.text!)
@@ -88,6 +88,28 @@ class BusinessesViewController: UIViewController, UITableViewDelegate, UITableVi
         
         userDefaults.set(searchBar.text!, forKey: "searchQuery")
     }
+    
+//    func scrollViewDidScroll(_ scrollView: UIScrollView) {
+//        if (!isMoreDataLoading) {
+//            // Calculate the position of one screen length before the bottom of the results
+//            let scrollViewContentHeight = tableView.contentSize.height
+//            let scrollOffsetThreshold = scrollViewContentHeight - tableView.bounds.size.height
+//            
+//            // When the user has scrolled past the threshold, start requesting
+//            if(scrollView.contentOffset.y > scrollOffsetThreshold && tableView.isDragging) {
+//                self.numPages += 1
+//                isMoreDataLoading = true
+//                
+//                // Update position of loadingMoreView, and start loading indicator
+//                let frame = CGRect(x: 0, y: collectionView.contentSize.height, width: collectionView.bounds.size.width, height: ProgressIndicator.defaultHeight)
+//                loadingMoreView?.frame = frame
+//                loadingMoreView!.startAnimating()
+//                
+//                // ... Code to load more results ...
+//                loadMoviesFromAPI()
+//            }
+//        }
+//    }
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         let cell = sender as! UITableViewCell
