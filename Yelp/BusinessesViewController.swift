@@ -100,10 +100,11 @@ class BusinessesViewController: UIViewController, UITableViewDelegate, UITableVi
             if(scrollView.contentOffset.y > scrollOffsetThreshold && tableView.isDragging) {
                 isMoreDataLoading = true
                 
-                let frame = CGRect(x: 0, y: tableView.contentSize.height, width: tableView.bounds.size.width, height: ProgressIndicator.defaultHeight)
-                
                 self.loadMoreOffset += 20
+                
                 loadMoreData()
+                
+                self.tableView.reloadData()
             }
         }
     }
@@ -112,17 +113,14 @@ class BusinessesViewController: UIViewController, UITableViewDelegate, UITableVi
         let prevQuery = self.userDefaults.string(forKey: "searchQuery")
         
         Business.searchWithTerm(term: prevQuery!, offset: loadMoreOffset, completion: { (businesses: [Business]?, error: Error?) -> Void in
-            self.loadMoreOffset += 20
             
             self.businesses.append(contentsOf: businesses!)
+            
+            self.isMoreDataLoading = false
             
             self.tableView.reloadData()
             
         })
-        
-        self.isMoreDataLoading = false
-        
-        self.tableView.reloadData()
         
     }
     
