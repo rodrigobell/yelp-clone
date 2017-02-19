@@ -25,6 +25,7 @@ The following **additional** features are implemented:
 - [x] Search query is saved using User Defaults and app starts with whatever the user searched for last.
 - [x] User can call business from Details screen. (Feature cannot be demoed in simulator since it doesn't support calls.)
 - [x] Customize UI.
+   - [x] Added app icon and launchscreen.
    - [x] Change navigation bar color tint to red.
    - [x] Detail screen background displays blurred thumbnail image of business.
    - [x] Auto Layout implemented in labels and images of details screen.
