@@ -21,6 +21,7 @@ The following **optional** features are implemented:
 
 The following **additional** features are implemented:
 
+- [x] Implement map view showing user's current location.
 - [x] Search query is saved using User Defaults and app starts with whatever the user searched for last.
 - [x] User can call business from Details screen. (Feature cannot be demoed in simulator since it doesn't support calls.)
 - [x] Customize UI.
